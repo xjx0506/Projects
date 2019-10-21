@@ -1,0 +1,44 @@
+body{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url(tech3.png) center/cover no-repeat;
+    /* background-position: center;
+    background-size: cover; 
+    background-repeat: no-repeat; */
+    color: aliceblue;
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: capitalize;
+}
+
+.counter-box{
+    flex: 0 0 60%;
+    text-align: center;
+    border: 2px solid rgb(176, 192, 35);
+    padding: 1rem;
+    box-shadow: 3px 3px 7px 7px black;
+}
+
+.counter{
+    font-size: 6rem;
+}
+.btn{
+    background: rgb(27, 185, 146);
+    border-radius: 8px;
+    font-size: 2rem;
+    color: aliceblue;
+    padding: 0.5rem; 
+    margin: 2.5rem 2.5rem 0.5rem;
+    border: 2px solid;
+    box-shadow: 5px 5px black;
+    outline: none;
+}
+
+.btn:hover{
+    background-color: rgb(73, 68, 62);
+    color: white;
+}
+.btn:active{
+    box-shadow: none;
+}
