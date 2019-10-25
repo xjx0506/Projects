@@ -6,6 +6,8 @@ black = (0,0,0)
 white = (255,255,255)
 green = (0,255,0)
 red = (255,0,0)
+purple = (154,230,233)
+
 screen_size = [700,500] #[width,height]
 screen = pygame.display.set_mode(screen_size)
 
@@ -40,7 +42,7 @@ class Ball(object):
 			#top
 		if self.y_pos < self._radius:
 			self.y_vel *= -1
-			
+
 		#detect if ball hit the paddle
 	def collisionDect(self,paddle):
 		paddleX = paddle.px_pos
@@ -53,11 +55,48 @@ class Ball(object):
 		and (bally + self._radius >= paddleY and bally <= (paddleY +paddleH)):
 			self.y_vel *= -1
 
+class Block(pygame.sprite.Sprite):
+	"""docstring for Block"""
+	def __init__(self,screen,blockx,blocky,blockw,blockh):
+		self.screen = screen
+		self.blockx = blockx
+		self.blocky = blocky
+		self.blockw = blockw
+		self.blockh = blockh
+	def drawBlock(self):
+		pygame.draw.rect(screen,purple,(self.blockx,self.blocky,self.blockw,self.blockh))
 
+	def removeBlock(self,group):
+		# remove this block object from the group
+		group.remove(self)
+
+	def addBlock(self,group):
+		group.add(self)
+
+		# detect collision between the ball and the 
+	def collide(self,ball):
+
+
+class BlockGroup(pygame.sprite.Group):
+	"""docstring for BlockGroup"""
+	def __init__(self,screen,x,y,width,height):
+		self.screen = screen
+
+		
+		
+
+
+
+
+
+
+		
 class Paddle(object):
 	"""docstring for paddle"""
-	paddle_vel = 35
-	def __init__(self, paddleX,paddleY,paddleW,paddleH):
+	speed = 0
+	# change_x = 5
+	def __init__(self, screen,paddleX,paddleY,paddleW,paddleH):
+		self.screen = screen
 		self.px_pos = paddleX
 		self.py_pos = paddleY
 		self._paddleW = paddleW
@@ -66,13 +105,16 @@ class Paddle(object):
 	def drawPaddle(self):
 		pygame.draw.rect(screen,red,(self.px_pos,self.py_pos,self._paddleW,self._paddleH))
  		
+	def padCollision(self):
+ 		if self._paddleW + self.px_pos > 699 or self.px_pos < 0:
+ 			self.speed *= -1
+ 		
 
 pygame.display.set_caption("GameStorm")
 
 ball = Ball(screen,20,400,100)
-paddle = Paddle(300,400,250,20)
-
-
+paddle = Paddle(screen,200,400,250,20)
+block = Block(screen)
 done = False
 #control how fast the game runs
 clock = pygame.time.Clock() 
@@ -83,25 +125,34 @@ while done == False:
 		if event.type == pygame.QUIT:
 			done = True
 		if event.type == pygame.KEYDOWN:
-			if event.type == pygame.K_LEFT:
-				paddle.px_pos -= paddle.paddle_vel
-			if event.type == pygame.K_RIGHT:
-				paddle.px_pos += paddle.paddle_vel
+			if event.key == pygame.K_LEFT:
+				paddle.speed -= 16
+			if event.key == pygame.K_RIGHT:
+				paddle.speed += 16
+		if event.type == pygame.KEYUP:
+			paddle.speed = 0
+	# if paddle._paddleW + paddle.px_pos > 699 or paddle.px_pos < 0:
+
+	paddle.px_pos += paddle.speed
+
 	#Event processing
 	screen.fill(black)
 	#Game logic
-
+	block.drawBlock()
 	ball.drawBall()
 	ball.moveBall()
+	ball.collisionDect(paddle)
 	#Game logic
 	paddle.drawPaddle()
-	ball.collisionDect(paddle)
+	paddle.padCollision()
+	# paddle.movePaddle()
+	
 	#Draw 
 
 	pygame.display.flip()
 	#Draw
 
-	clock.tick(30)
+	clock.tick(60)
 
 
 pygame.quit()
